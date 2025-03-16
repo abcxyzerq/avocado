@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@indexlibrary</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style1.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -19,17 +19,17 @@
     
     <div class="content hidden">
         <video autoplay loop muted playsinline class="bg-video">
-            <source src="minecraft.mp4" type="video/webm">
+            <source src="minecraft.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
         <audio loop class="bg-audio">
-            <source src="cor.mp3" type="audio/ogg">
+            <source src="cor.mp3" type="audio/mpeg">
             Your browser does not support the audio tag.
         </audio>
         <main class="profile-card">
             <img src="pfp.jpg" alt="Profile Picture" class="profile-picture">
             <h1>index Library</h1>
-            <p class="bio">"Fate made us friends, your mother will make us a family" ❤</p>
+            <p class="bio">"Fate made us friends, your mother will makes us a family" ❤</p>
             <p class="location"><i class="fas fa-map-marker-alt"></i> Hai Phong City, Viet Nam</p>
             <div class="social-links">
                 <a href="https://www.facebook.com/SupmerNmguoi/" target="_blank" aria-label="Facebook Profile"><i class="fab fa-facebook-f"></i></a>
@@ -67,7 +67,7 @@
             setTimeout(typeEffect, isDeleting ? 100 : 200);
         }
 
-        // Snowfall effect
+        // Snowfall effect and page visibility handling
         document.addEventListener("DOMContentLoaded", () => {
             typeEffect();
             const canvas = document.getElementById('snowfall');
@@ -105,6 +105,8 @@
             const content = document.querySelector('.content');
             const profileCard = document.querySelector('.profile-card');
             const audio = document.querySelector('.bg-audio');
+            const introVideo = document.querySelector('.intro-video');
+            const bgVideo = document.querySelector('.bg-video');
 
             introScreen.addEventListener('click', () => {
                 introScreen.style.opacity = '0';
@@ -116,6 +118,21 @@
                     audio.volume = 0.5;
                     audio.play().catch(error => console.log("Autoplay blocked:", error));
                 }, 1000);
+            });
+
+            // Handle page visibility
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'hidden') {
+                    // Tạm dừng mọi thứ khi trang không hiển thị
+                    if (introVideo) introVideo.pause();
+                    if (bgVideo) bgVideo.pause();
+                    if (audio) audio.pause();
+                } else if (document.visibilityState === 'visible') {
+                    // Tiếp tục phát khi trang hiển thị trở lại
+                    if (introVideo && introScreen.style.display !== 'none') introVideo.play();
+                    if (bgVideo && content.classList.contains('hidden') === false) bgVideo.play();
+                    if (audio && content.classList.contains('hidden') === false) audio.play();
+                }
             });
         });
     </script>
