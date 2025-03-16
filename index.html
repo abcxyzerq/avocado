@@ -4,34 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@indexlibrary</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style1.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <video autoplay loop muted playsinline class="bg-video">
-        <source src="minecraft.webm" type="video/webm">
-        Your browser does not support the video tag.
-    </video>
-    <audio loop class="bg-audio">
-        <source src="cor.ogg" type="audio/ogg">
-        Your browser does not support the audio tag.
-    </audio>
-    <main class="profile-card">
-        <img src="pfp.jpg" alt="Profile Picture" class="profile-picture">
-        <h1>index Library</h1>
-        <p class="bio">"Fate made us friends, your mother will makes us a family" ❤</p>
-        <p class="location"><i class="fas fa-map-marker-alt"></i> Hai Phong City, Viet Nam</p>
-        <div class="social-links">
-            <a href="https://www.facebook.com/SupmerNmguoi/" target="_blank" aria-label="Facebook Profile"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://www.tiktok.com/@sheeepinovernight" target="_blank" aria-label="TikTok Profile"><i class="fab fa-tiktok"></i></a>
-            <a href="https://www.instagram.com/indexlibrary_/" target="_blank" aria-label="Instagram Profile"><i class="fab fa-instagram"></i></a>
-            <a href="https://discord.com/users/713668712007467069" target="_blank" aria-label="Discord Profile"><i class="fab fa-discord"></i></a>
-        </div>
-        <p class="view-count"><i class="fas fa-eye"></i> 2007</p>
-    </main>
+    <div class="intro-screen">
+        <video autoplay loop muted playsinline class="intro-video">
+            <source src="minecraft.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <h2>Click to Enter...</h2>
+        <canvas id="snowfall"></canvas>
+    </div>
+    
+    <div class="content hidden">
+        <video autoplay loop muted playsinline class="bg-video">
+            <source src="minecraft.mp4" type="video/webm">
+            Your browser does not support the video tag.
+        </video>
+        <audio loop class="bg-audio">
+            <source src="cor.mp3" type="audio/ogg">
+            Your browser does not support the audio tag.
+        </audio>
+        <main class="profile-card">
+            <img src="pfp.jpg" alt="Profile Picture" class="profile-picture">
+            <h1>index Library</h1>
+            <p class="bio">"Fate made us friends, your mother will makes us a family" ❤</p>
+            <p class="location"><i class="fas fa-map-marker-alt"></i> Hai Phong City, Viet Nam</p>
+            <div class="social-links">
+                <a href="https://www.facebook.com/SupmerNmguoi/" target="_blank" aria-label="Facebook Profile"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.tiktok.com/@sheeepinovernight" target="_blank" aria-label="TikTok Profile"><i class="fab fa-tiktok"></i></a>
+                <a href="https://www.instagram.com/indexlibrary_/" target="_blank" aria-label="Instagram Profile"><i class="fab fa-instagram"></i></a>
+                <a href="https://discord.com/users/713668712007467069" target="_blank" aria-label="Discord Profile"><i class="fab fa-discord"></i></a>
+            </div>
+            <p class="view-count"><i class="fas fa-eye"></i> 2007</p>
+        </main>
+    </div>
 
     <script>
-        // Hiệu ứng typing/backspacing chỉ cho "indexlibrary", giữ nguyên "@"
+        // Typing effect
         const baseTitle = "@ ";
         const typingText = "indexlibrary";
         let index = 0;
@@ -43,7 +54,7 @@
                 index++;
                 if (index === typingText.length) {
                     isDeleting = true;
-                    setTimeout(typeEffect, 1000); // Giữ nguyên 1s rồi bắt đầu xóa
+                    setTimeout(typeEffect, 1000);
                     return;
                 }
             } else {
@@ -53,21 +64,60 @@
                     isDeleting = false;
                 }
             }
-            setTimeout(typeEffect, isDeleting ? 100 : 200); // Xóa nhanh hơn một chút
+            setTimeout(typeEffect, isDeleting ? 100 : 200);
         }
 
+        // Snowfall effect
         document.addEventListener("DOMContentLoaded", () => {
             typeEffect();
-            const audio = document.querySelector(".bg-audio");
-            audio.muted = false;
-            audio.play().catch(error => console.log("Autoplay blocked:", error));
+            const canvas = document.getElementById('snowfall');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const snowflakes = [];
+            for (let i = 0; i < 100; i++) {
+                snowflakes.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 3 + 1,
+                    speed: Math.random() * 2 + 1
+                });
+            }
+
+            function drawSnow() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.beginPath();
+                snowflakes.forEach(flake => {
+                    flake.y += flake.speed;
+                    if (flake.y > canvas.height) flake.y = -flake.radius;
+                    ctx.moveTo(flake.x, flake.y);
+                    ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+                });
+                ctx.fill();
+                requestAnimationFrame(drawSnow);
+            }
+            drawSnow();
+
+            // Intro screen click handler
+            const introScreen = document.querySelector('.intro-screen');
+            const content = document.querySelector('.content');
+            const profileCard = document.querySelector('.profile-card');
+            const audio = document.querySelector('.bg-audio');
+
+            introScreen.addEventListener('click', () => {
+                introScreen.style.opacity = '0';
+                setTimeout(() => {
+                    introScreen.style.display = 'none';
+                    content.classList.remove('hidden');
+                    profileCard.classList.add('show-profile');
+                    audio.muted = false;
+                    audio.volume = 0.5;
+                    audio.play().catch(error => console.log("Autoplay blocked:", error));
+                }, 1000);
+            });
         });
-    </script>
-    <script>
-        const audio = document.querySelector('.bg-audio');
-        if (audio) {
-            audio.volume = 0.5;
-        }
     </script>
 </body>
 </html>
