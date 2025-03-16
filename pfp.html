@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@indexlibrary</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <video autoplay loop muted playsinline class="bg-video">
+        <source src="minecraft.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <audio loop class="bg-audio">
+        <source src="cor.mp3" type="audio/mpeg">
+        Your browser does not support the audio tag.
+    </audio>
+    <main class="profile-card">
+        <img src="pfp.jpg" alt="Profile Picture" class="profile-picture">
+        <h1>index Library</h1>
+        <p class="bio">"Fate made us friends, your mother will makes us a family" ❤</p>
+        <p class="location"><i class="fas fa-map-marker-alt"></i> Hai Phong City, Viet Nam</p>
+        <div class="social-links">
+            <a href="https://www.facebook.com/SupmerNmguoi/" target="_blank" aria-label="Facebook Profile"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.tiktok.com/@sheeepinovernight" target="_blank" aria-label="TikTok Profile"><i class="fab fa-tiktok"></i></a>
+            <a href="https://www.instagram.com/indexlibrary_/" target="_blank" aria-label="Instagram Profile"><i class="fab fa-instagram"></i></a>
+            <a href="https://discord.com/users/713668712007467069" target="_blank" aria-label="Discord Profile"><i class="fab fa-discord"></i></a>
+        </div>
+        <p class="view-count"><i class="fas fa-eye"></i> 2007</p>
+    </main>
+
+    <script>
+        // Hiệu ứng typing/backspacing chỉ cho "indexlibrary", giữ nguyên "@"
+        const baseTitle = "@ ";
+        const typingText = "indexlibrary";
+        let index = 0;
+        let isDeleting = false;
+
+        function typeEffect() {
+            if (!isDeleting) {
+                document.title = baseTitle + typingText.substring(0, index + 1);
+                index++;
+                if (index === typingText.length) {
+                    isDeleting = true;
+                    setTimeout(typeEffect, 1000); // Giữ nguyên 1s rồi bắt đầu xóa
+                    return;
+                }
+            } else {
+                document.title = baseTitle + typingText.substring(0, index - 1);
+                index--;
+                if (index === 0) {
+                    isDeleting = false;
+                }
+            }
+            setTimeout(typeEffect, isDeleting ? 100 : 200); // Xóa nhanh hơn một chút
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            typeEffect();
+            const audio = document.querySelector(".bg-audio");
+            audio.muted = false;
+            audio.play().catch(error => console.log("Autoplay blocked:", error));
+        });
+    </script>
+    <script>
+        const audio = document.querySelector('.bg-audio');
+        if (audio) {
+            audio.volume = 0.1;
+        }
+    </script>
+</body>
+</html>
